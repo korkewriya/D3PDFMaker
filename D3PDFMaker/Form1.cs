@@ -34,7 +34,7 @@ namespace D3PDFMaker
 
         // イメージファイル
         const string defaultImg = @"resources/default_img.png";
-        const string loadingImg = @"resources/loading.gif";
+        Bitmap loadingImg = Properties.Resources.loading;
 
         string binPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         string loadAnimePath = "";
@@ -61,9 +61,8 @@ namespace D3PDFMaker
             {
                 pdfPath = txtbx_PDF.Text = openFile.FileName;
 
-                loadAnimePath = Path.Combine(binPath, loadingImg);
                 thumbBox.SizeMode = PictureBoxSizeMode.CenterImage;
-                thumbBox.ImageLocation = loadAnimePath;
+                thumbBox.Image = loadingImg;
                 btn_PDF.Enabled = false;
 
                 await Task.Run(() =>
