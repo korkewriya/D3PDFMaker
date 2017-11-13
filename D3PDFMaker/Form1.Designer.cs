@@ -52,7 +52,11 @@
             this.txtbx_Sampletext = new System.Windows.Forms.TextBox();
             this.box_excelsheet = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.colorBox = new System.Windows.Forms.PictureBox();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.thumbBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.colorBox)).BeginInit();
             this.SuspendLayout();
             // 
             // thumbBox
@@ -127,7 +131,6 @@
             this.label3.Size = new System.Drawing.Size(38, 12);
             this.label3.TabIndex = 7;
             this.label3.Text = "フォント";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // box_fontlist
             // 
@@ -278,11 +281,32 @@
             this.label6.TabIndex = 25;
             this.label6.Text = "読み込むシート";
             // 
+            // colorBox
+            // 
+            this.colorBox.BackColor = System.Drawing.SystemColors.Desktop;
+            this.colorBox.Location = new System.Drawing.Point(562, 234);
+            this.colorBox.Name = "colorBox";
+            this.colorBox.Size = new System.Drawing.Size(82, 16);
+            this.colorBox.TabIndex = 26;
+            this.colorBox.TabStop = false;
+            this.colorBox.Click += new System.EventHandler(this.colorBox_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(524, 237);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(32, 12);
+            this.label7.TabIndex = 27;
+            this.label7.Text = "カラー";
+            // 
             // form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(656, 359);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.colorBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.box_excelsheet);
             this.Controls.Add(this.txtbx_Sampletext);
@@ -314,6 +338,7 @@
             this.Text = "D3PDFMaker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.thumbBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.colorBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -344,6 +369,9 @@
         private System.Windows.Forms.TextBox txtbx_Sampletext;
         private System.Windows.Forms.ComboBox box_excelsheet;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.PictureBox colorBox;
+        private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.Label label7;
     }
 }
 

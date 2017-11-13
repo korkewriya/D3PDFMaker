@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Drawing;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -49,9 +50,9 @@ namespace D3PDFMaker
 
         // 指定座標・フォントでテキストを追記する
         public void Append(ref PdfContentByte pdfContentByte, string str,
-                          float x, float y, float boxWidth, float fontSize, string FONT, int alignment = 0)
+                          float x, float y, float boxWidth, float fontSize, string FONT, Color fontcolor, int alignment = 0)
         {
-            SetFont(ref pdfContentByte, FONT, fontSize, str, boxWidth);
+            SetFont(ref pdfContentByte, FONT, fontSize, str, boxWidth, fontcolor);
             ShowTextAligned(pdfContentByte, x, y + 1, str, alignment);
         }
 
@@ -88,12 +89,14 @@ namespace D3PDFMaker
         }
 
         // フォント・スケールを設定する
-        public void SetFont(ref PdfContentByte pdfContentByte, string fontname, float fontsize, string text, float boxWidth)
+        public void SetFont(ref PdfContentByte pdfContentByte, string fontname, float fontsize, string text, float boxWidth, Color fontcolor)
         {
             var bf = BaseFont.CreateFont(fontname, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             pdfContentByte.SetFontAndSize(bf, fontsize);
             float hScale = this.GetHorizontalScaling(bf, text, fontsize, boxWidth);
             pdfContentByte.SetHorizontalScaling(hScale);
+            BaseColor newcolor = new BaseColor(fontcolor.R, fontcolor.G, fontcolor.B);
+            pdfContentByte.SetColorFill(newcolor);
         }
 
         // 指定幅に収まるよう長体をかけて調整する用の値を取得する

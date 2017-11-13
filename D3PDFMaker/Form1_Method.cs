@@ -140,7 +140,7 @@ namespace D3PDFMaker
             {
                 PDFAppend pdf = new PDFAppend(pdfPath);
                 var pdfContentByte = pdf.CopyTemplate();
-                pdf.Append(ref pdfContentByte, mansionName, alignedMinX, maxY, slctWidth, slctHeight, font, align);
+                pdf.Append(ref pdfContentByte, mansionName, alignedMinX, maxY, slctWidth, slctHeight, font, fontcolor, align);
                 pdf.Close();
                 string dstPath = Path.Combine(subPathName, filename);
                 try
@@ -160,8 +160,7 @@ namespace D3PDFMaker
 
             return values;
         }
-
-
+        
         // フォント一覧をコンボボックスに表示する
         private void GetFontList()
         {

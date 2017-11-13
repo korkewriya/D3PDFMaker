@@ -34,6 +34,8 @@ namespace D3PDFMaker
 
         public static int dpi = 100;
 
+        public Color fontcolor = Color.FromArgb(0, 0, 0);
+
         // イメージファイル
         Bitmap loadingImg = Properties.Resources.loading;
 
@@ -184,7 +186,7 @@ namespace D3PDFMaker
             {
                 PDFAppend pdf = new PDFAppend(pdfPath);
                 var pdfContentByte = pdf.CopyTemplate();
-                pdf.Append(ref pdfContentByte, sampleText, alignedMinX, maxY, slctWidth, slctHeight, font, align);
+                pdf.Append(ref pdfContentByte, sampleText, alignedMinX, maxY, slctWidth, slctHeight, font, fontcolor, align);
                 pdf.Close();
                 try {
                     pdf.Save(dstPath);
@@ -326,10 +328,15 @@ namespace D3PDFMaker
 
             if(errorList.Count > 0) {
                 var errors = String.Join("\n", errorList);
-                MessageBox.Show("以下の項目にエラーが出ていますのでご確認ください。\n" + errors,
+                var errorlog = Path.Combine(subPathName, "エラーログ.txt");
+                StreamWriter sw = File.CreateText(errorlog);
+                sw.Write(errors);
+                sw.Close();
+                MessageBox.Show("エラーが発生しています。エクセルリストをご確認ください。",
                                 "メッセージ",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Asterisk);
+                System.Diagnostics.Process p = System.Diagnostics.Process.Start(errorlog);
             }
 
             progressForm.Close();
@@ -368,6 +375,8 @@ namespace D3PDFMaker
             slctWidth = 0;
             slctHeight = 0;
             DisableDropDownList();
+            fontcolor = Color.FromArgb(0, 0, 0);
+            colorBox.BackColor = fontcolor;
         }
 
         //フォームを閉じるときの処理
@@ -376,9 +385,14 @@ namespace D3PDFMaker
             
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        // カラーボックスをクリックしたときの処理
+        private void colorBox_Click(object sender, EventArgs e)
         {
-
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                colorBox.BackColor = colorDialog.Color;
+                fontcolor = colorDialog.Color;
+            }
         }
     }
 }
