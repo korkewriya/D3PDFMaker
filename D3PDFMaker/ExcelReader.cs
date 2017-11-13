@@ -12,17 +12,40 @@ namespace D3PDFMaker
 {
     public class ExcelReader
     {
+        FileStream stream;
         IWorkbook book;
 
         public ExcelReader(string file)
         {
-            FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+            stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             book = WorkbookFactory.Create(stream);
+        }
+
+        public void Close()
+        {
+            book.Close();
+            stream.Close();
         }
 
         public ISheet GetSheet(int sheetIndex)
         {
             return book.GetSheetAt(sheetIndex);
+        }
+
+        public int GetSheetLen()
+        {
+            return book.NumberOfSheets;
+        }
+
+        public string[] GetSheetNameArr(int sheetLen)
+        {
+            var sheetNameArr = new string[sheetLen];
+            for(int i = 0; sheetLen > i; i++)
+            {
+                var sheet = GetSheet(i);
+                sheetNameArr[i] = sheet.SheetName;
+            }
+            return sheetNameArr;
         }
 
         public int GetLastRow(ISheet sheet)
@@ -59,9 +82,9 @@ namespace D3PDFMaker
             }
 
             int[,] coordArr = new int[4, 2] { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 1, 2 } };
-            string[] valueArr = new string[] { "第三バリアブル専用 マンション名・地名リスト",
+            string[] valueArr = new string[] { "第三企画 マンション名・地名リスト",
                                                "No.",
-                                               "印刷　マンション名・地名",
+                                               "印刷 マンション名・地名",
                                                "部数" };
             for (int i = 0; valueArr.Length > i; i++)
             {

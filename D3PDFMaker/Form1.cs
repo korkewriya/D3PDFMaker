@@ -18,7 +18,7 @@ namespace D3PDFMaker
         /// <summary>
         /// メインフォームのイベント
         /// </summary>
-        static public bool forCustomer = false;
+        static public bool forCustomer = true;
 
         private List<string> errorList = new List<string>();
 
@@ -32,15 +32,10 @@ namespace D3PDFMaker
         public float slctWidth = 0;
         public float slctHeight = 0;
 
+        public static int dpi = 100;
+
         // イメージファイル
-        const string defaultImg = @"resources/default_img.png";
         Bitmap loadingImg = Properties.Resources.loading;
-
-        string binPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        string loadAnimePath = "";
-
-        System.Drawing.Text.PrivateFontCollection pfc =
-            new System.Drawing.Text.PrivateFontCollection();
 
         public form1()
         {
@@ -68,7 +63,7 @@ namespace D3PDFMaker
                 await Task.Run(() =>
                 {
                     var thumb = new ThumbMaker();
-                    tmpPath = thumb.Generate(openFile.FileName);
+                    tmpPath = thumb.Generate(openFile.FileName, dpi: form1.dpi);
 
                     thumbBox.SizeMode = PictureBoxSizeMode.Zoom;
                     thumbBox.BackgroundImageLayout = ImageLayout.Center;
@@ -76,7 +71,6 @@ namespace D3PDFMaker
                 });
 
                 btn_PDF.Enabled = true;
-                loadAnimePath = "";
             }
         }
 
@@ -92,6 +86,40 @@ namespace D3PDFMaker
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 excelPath = txtbx_Excel.Text = openFile.FileName;
+
+                ExcelReader excel;
+                try
+                {
+                    excel = new ExcelReader(excelPath);
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show("エクセルファイルが見つかりません。または、エクセルファイルを閉じてからエクセルを選択してください。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    excelPath = txtbx_Excel.Text = "";
+                    DisableDropDownList();
+                    return;
+                }
+
+                var sheet = excel.GetSheet(0);
+                if (!excel.IsRegularExcel(sheet))
+                {
+                    MessageBox.Show("専用エクセルファイルを使用してください。",
+                                    "エラー",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    excelPath = txtbx_Excel.Text = "";
+                    DisableDropDownList();
+                    excel.Close();
+                    return;
+                }
+
+                int sheetLen = excel.GetSheetLen();
+                string[] sheetNameArr = excel.GetSheetNameArr(sheetLen);
+                SetSheetNumToDropDownBox(sheetLen, sheetNameArr);
+                excel.Close();
             }
         }
 
@@ -131,6 +159,7 @@ namespace D3PDFMaker
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
             string font = box_fontlist.SelectedValue.ToString();
+            string sampleText = txtbx_Sampletext.Text.ToString();
 
             int align = GetRadioBoxValue();
             float alignedMinX = GetAlignedXcoord(minX, slctWidth, align);
@@ -155,7 +184,7 @@ namespace D3PDFMaker
             {
                 PDFAppend pdf = new PDFAppend(pdfPath);
                 var pdfContentByte = pdf.CopyTemplate();
-                pdf.Append(ref pdfContentByte, "○○○○○マンション", alignedMinX, maxY, slctWidth, slctHeight, font, align);
+                pdf.Append(ref pdfContentByte, sampleText, alignedMinX, maxY, slctWidth, slctHeight, font, align);
                 pdf.Close();
                 try {
                     pdf.Save(dstPath);
@@ -167,12 +196,16 @@ namespace D3PDFMaker
                                     MessageBoxIcon.Error);
                     return;
                 }
-                MessageBox.Show(dstPath + "を作成しました。");
-            });
+                finally
+                {
+                    btn_MakeSample.Enabled = true;
+                    btn_MakeAll.Enabled = true;
+                    btn_reset.Enabled = true;
+                }
 
-            btn_MakeSample.Enabled = true;
-            btn_MakeAll.Enabled = true;
-            btn_reset.Enabled = true;
+                MessageBox.Show(dstPath + "を作成しました。");
+                System.Diagnostics.Process p = System.Diagnostics.Process.Start(dstPath);
+            });
         }
 
         // 全データを作成 ボタンを押したときの処理
@@ -205,17 +238,7 @@ namespace D3PDFMaker
             }
             catch (IOException)
             {
-                MessageBox.Show("エクセルデータを閉じてから[全データ作成]ボタンを押してください。",
-                                "エラー",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                return;
-            }
-
-            var sheet = excel.GetSheet(0);
-            if (!excel.IsRegularExcel(sheet))
-            {
-                MessageBox.Show("専用エクセルファイルを使用してください。",
+                MessageBox.Show("エクセルファイルが見つかりません。または、エクセルファイルを閉じてから[全データ作成]ボタンを押してください。",
                                 "エラー",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
@@ -224,9 +247,15 @@ namespace D3PDFMaker
 
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
-            var NoList = excel.ReadCol(sheet, 0, 2);
-            var MansionNameList = excel.ReadCol(sheet, 1, 2);
-            var PrintCntList = excel.ReadCol(sheet, 2, 2);
+            int sheetNum = Convert.ToInt32(box_excelsheet.SelectedValue.ToString());
+            var sheet = excel.GetSheet(sheetNum - 1);
+            var sheetName = sheet.SheetName;
+
+            var NoList = excel.ReadCol(sheet, colIndex: 0, fromRow: 3);
+            var MansionNameList = excel.ReadCol(sheet, colIndex: 1, fromRow: 3);
+            var PrintCntList = excel.ReadCol(sheet, colIndex: 2, fromRow: 3);
+
+            excel.Close();
 
             // 指定フォルダに D3作成済PDF フォルダを作る
             string savePath2 = Path.Combine(savePath, "D3作成済PDF");
@@ -241,7 +270,7 @@ namespace D3PDFMaker
             }
 
             // D3作成済PDF フォルダに、子フォルダを作る
-            string subFolderName = Path.GetFileNameWithoutExtension(pdfPath);
+            string subFolderName = Path.GetFileNameWithoutExtension(pdfPath) + "_" + sheetName;
             string subPathName = Path.Combine(savePath2, subFolderName);
             Directory.CreateDirectory(subPathName);
 
@@ -257,6 +286,15 @@ namespace D3PDFMaker
             List<string> ValidPrintCntList = new List<string>();
             List<string> ValidNoList = new List<string>();
             GetValidList(ValidNoList, ValidMansionNameList, ValidPrintCntList, NoList, MansionNameList, PrintCntList);
+
+            if(ValidMansionNameList.Count < 1)
+            {
+                MessageBox.Show("指定したエクセルシートに、有効なマンション名・部数の組み合わせがありません。",
+                                "エラー",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
 
             ProgressBarForm progressForm = new ProgressBarForm();
             var progressFormTask = progressForm.ShowDialogAsync();
@@ -301,7 +339,7 @@ namespace D3PDFMaker
         // サムネイルスペースをクリックしたときの処理
         private void thumbBox_Click(object sender, EventArgs e)
         {
-            if (loadAnimePath != "")
+            if (thumbBox.Image == loadingImg)
             {
                 return;
             }
@@ -329,12 +367,18 @@ namespace D3PDFMaker
             maxY = 0;
             slctWidth = 0;
             slctHeight = 0;
+            DisableDropDownList();
         }
 
         //フォームを閉じるときの処理
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //File.Delete(tmpPath[0]);
+            
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

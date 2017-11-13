@@ -14,7 +14,7 @@ namespace D3PDFMaker
         private GhostscriptRasterizer _rasterizer = null;
         private int pageCount = 0;
 
-        public string[] Generate(string pdfFile, int dpi = 96, bool multi = false)
+        public string[] Generate(string pdfFile, int dpi = 100, bool multi = false)
         {
             string binPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string gsDllPath = Path.Combine(binPath, "gsdll32.dll");

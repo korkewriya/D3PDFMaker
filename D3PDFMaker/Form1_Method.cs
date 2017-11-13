@@ -73,6 +73,41 @@ namespace D3PDFMaker
             return false;
         }
 
+        // エクセルページ数をドロップダウンリストに反映する
+        public void SetSheetNumToDropDownBox(int sheetLen, string[] sheetNameArr)
+        {
+            // 現在のリストをクリアする
+            box_excelsheet.DataSource = null;
+            box_excelsheet.Items.Clear();
+
+            DataTable sheetTable = new DataTable();
+            sheetTable.Columns.Add("ID", typeof(string));
+            sheetTable.Columns.Add("DISP_NAME", typeof(string));
+
+            for (int i = 1; sheetLen >= i; i++)
+            {
+                DataRow row = sheetTable.NewRow();
+                row["ID"] = i.ToString();
+                row["DISP_NAME"] = i.ToString() + " <" + sheetNameArr[i-1] + ">";
+                sheetTable.Rows.Add(row);
+            }
+            box_excelsheet.Enabled = true;
+
+            box_excelsheet.DataSource = sheetTable;
+            box_excelsheet.DisplayMember = "DISP_NAME";
+            box_excelsheet.ValueMember = "ID";
+
+            box_excelsheet.SelectedItem = box_excelsheet.Items[0];
+        }
+
+        // ドロップダウンリストを無効化する
+        public void DisableDropDownList()
+        {
+            box_excelsheet.Enabled = false;
+            box_excelsheet.DataSource = null;
+            box_excelsheet.Items.Clear();
+        }
+
         // PDFデータをまとめて作成する
         async public Task<ProgressValue> MakeAllPDF(string mansionName, string printCnt, string no, string subPathName, int cnt)
         {
@@ -92,7 +127,9 @@ namespace D3PDFMaker
             {
                 printCnt = "CP" + Convert.ToString(Math.Ceiling(Convert.ToDecimal(printCnt) / 2));
             }
-            string filename = no + "_" + mansionName + "_" + printCnt + ".pdf";
+            // ロッキーさんより指示あり、一時的にIndexをファイル名に含めない（11/11/13）
+            // string filename = no + "_" + mansionName + "_" + printCnt + ".pdf";
+            string filename = mansionName + "_" + printCnt + ".pdf";
 
             string font = box_fontlist.SelectedValue.ToString();
 

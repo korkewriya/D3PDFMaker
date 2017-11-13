@@ -82,10 +82,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 111);
+            this.ControlBox = false;
             this.Controls.Add(this.lbl_dir);
             this.Controls.Add(this.lbl_count);
             this.Controls.Add(this.lbl_pdfname);
             this.Controls.Add(this.ProgressBarControl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ProgressBarForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PDFデータを作成中…";

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(form1));
             this.thumbBox = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtbx_PDF = new System.Windows.Forms.TextBox();
@@ -47,6 +48,10 @@
             this.btn_MakeAll = new System.Windows.Forms.Button();
             this.btn_reset = new System.Windows.Forms.Button();
             this.lbl_fontSample = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtbx_Sampletext = new System.Windows.Forms.TextBox();
+            this.box_excelsheet = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.thumbBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,19 +122,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(270, 119);
+            this.label3.Location = new System.Drawing.Point(270, 176);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(38, 12);
             this.label3.TabIndex = 7;
             this.label3.Text = "フォント";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // box_fontlist
             // 
             this.box_fontlist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.box_fontlist.FormattingEnabled = true;
-            this.box_fontlist.Location = new System.Drawing.Point(272, 139);
+            this.box_fontlist.Location = new System.Drawing.Point(272, 196);
             this.box_fontlist.Name = "box_fontlist";
-            this.box_fontlist.Size = new System.Drawing.Size(343, 20);
+            this.box_fontlist.Size = new System.Drawing.Size(197, 20);
             this.box_fontlist.TabIndex = 10;
             this.box_fontlist.SelectedIndexChanged += new System.EventHandler(this.box_fontlist_SelectedIndexChanged);
             // 
@@ -137,7 +143,7 @@
             // 
             this.rdo_center.AutoSize = true;
             this.rdo_center.Checked = true;
-            this.rdo_center.Location = new System.Drawing.Point(272, 233);
+            this.rdo_center.Location = new System.Drawing.Point(272, 235);
             this.rdo_center.Name = "rdo_center";
             this.rdo_center.Size = new System.Drawing.Size(68, 16);
             this.rdo_center.TabIndex = 11;
@@ -148,7 +154,7 @@
             // rdo_left
             // 
             this.rdo_left.AutoSize = true;
-            this.rdo_left.Location = new System.Drawing.Point(360, 233);
+            this.rdo_left.Location = new System.Drawing.Point(360, 235);
             this.rdo_left.Name = "rdo_left";
             this.rdo_left.Size = new System.Drawing.Size(56, 16);
             this.rdo_left.TabIndex = 12;
@@ -159,7 +165,7 @@
             // rdo_right
             // 
             this.rdo_right.AutoSize = true;
-            this.rdo_right.Location = new System.Drawing.Point(436, 233);
+            this.rdo_right.Location = new System.Drawing.Point(436, 235);
             this.rdo_right.Name = "rdo_right";
             this.rdo_right.Size = new System.Drawing.Size(56, 16);
             this.rdo_right.TabIndex = 13;
@@ -228,19 +234,59 @@
             // 
             this.lbl_fontSample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbl_fontSample.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lbl_fontSample.Location = new System.Drawing.Point(272, 169);
+            this.lbl_fontSample.Location = new System.Drawing.Point(485, 184);
             this.lbl_fontSample.Name = "lbl_fontSample";
             this.lbl_fontSample.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lbl_fontSample.Size = new System.Drawing.Size(343, 43);
+            this.lbl_fontSample.Size = new System.Drawing.Size(159, 32);
             this.lbl_fontSample.TabIndex = 20;
             this.lbl_fontSample.Text = "サンプルテキスト";
             this.lbl_fontSample.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(272, 123);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(134, 12);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "見本データに入れるテキスト";
+            // 
+            // txtbx_Sampletext
+            // 
+            this.txtbx_Sampletext.Location = new System.Drawing.Point(274, 142);
+            this.txtbx_Sampletext.Name = "txtbx_Sampletext";
+            this.txtbx_Sampletext.Size = new System.Drawing.Size(239, 19);
+            this.txtbx_Sampletext.TabIndex = 22;
+            this.txtbx_Sampletext.Text = "○○○○マンション";
+            // 
+            // box_excelsheet
+            // 
+            this.box_excelsheet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.box_excelsheet.Enabled = false;
+            this.box_excelsheet.FormattingEnabled = true;
+            this.box_excelsheet.Location = new System.Drawing.Point(528, 142);
+            this.box_excelsheet.Name = "box_excelsheet";
+            this.box_excelsheet.Size = new System.Drawing.Size(116, 20);
+            this.box_excelsheet.TabIndex = 23;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(526, 123);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(78, 12);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "読み込むシート";
             // 
             // form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(656, 359);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.box_excelsheet);
+            this.Controls.Add(this.txtbx_Sampletext);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.lbl_fontSample);
             this.Controls.Add(this.btn_reset);
             this.Controls.Add(this.btn_MakeAll);
@@ -261,6 +307,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.thumbBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "D3PDFMaker";
@@ -292,6 +340,10 @@
         private System.Windows.Forms.Button btn_MakeAll;
         private System.Windows.Forms.Button btn_reset;
         private System.Windows.Forms.Label lbl_fontSample;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtbx_Sampletext;
+        private System.Windows.Forms.ComboBox box_excelsheet;
+        private System.Windows.Forms.Label label6;
     }
 }
 

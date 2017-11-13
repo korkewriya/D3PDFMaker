@@ -113,19 +113,19 @@ namespace D3PDFMaker
             int box_Width = 130;
             int box_Height = 30;
 
-            this.OKButton = new System.Windows.Forms.Button();
-            this.OKButton.Name = "OKButton";
-            this.OKButton.Text = "範囲を決定する";
-            this.OKButton.FlatStyle = FlatStyle.Flat;
-            this.OKButton.FlatAppearance.BorderSize = 2;
+            OKButton = new System.Windows.Forms.Button();
+            OKButton.Name = "OKButton";
+            OKButton.Text = "範囲を決定する";
+            OKButton.FlatStyle = FlatStyle.Flat;
+            OKButton.FlatAppearance.BorderSize = 2;
 
-            this.OKButton.Location = new Point(x - box_Width, y + 5);
-            this.OKButton.Size = new System.Drawing.Size(box_Width, box_Height);
+            OKButton.Location = new Point(x - box_Width, y + 5);
+            OKButton.Size = new System.Drawing.Size(box_Width, box_Height);
 
-            this.OKButton.Click += new EventHandler(button1_Click);
+            OKButton.Click += new EventHandler(button1_Click);
 
-            this.Controls.Add(this.OKButton);
-            this.OKButton.BringToFront();
+            Controls.Add(this.OKButton);
+            OKButton.BringToFront();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -139,12 +139,12 @@ namespace D3PDFMaker
             int slctWidth = GetLength(start.X, end.X) - 1;
             int slctHeight = GetLength(start.Y, end.Y) - 1;
 
-            ImgCoordToPDFCoord(ref y, currentImage.Width, currentImage.Height);
+            ImgCoordToPDFCoord(ref y, currentImage.Height);
 
-            f1.minX = PixelToPoint(x);
-            f1.maxY = PixelToPoint(y);
-            f1.slctWidth = PixelToPoint(GetLength(start.X, end.X));
-            f1.slctHeight = PixelToPoint(GetLength(start.Y, end.Y));
+            f1.minX = PixelToPoint(x, form1.dpi);
+            f1.maxY = PixelToPoint(y, form1.dpi);
+            f1.slctWidth = PixelToPoint(GetLength(start.X, end.X), form1.dpi);
+            f1.slctHeight = PixelToPoint(GetLength(start.Y, end.Y), form1.dpi);
 
             this.Close();
         }
@@ -175,12 +175,12 @@ namespace D3PDFMaker
             bmp.MakeTransparent();
         }
 
-        private float PixelToPoint(int pixel, int dpi = 96)
+        private float PixelToPoint(int pixel, int dpi)
         {
             return pixel * 72 / (float)dpi;
         }
 
-        private void ImgCoordToPDFCoord(ref int y, int imgWidth, int imgHeight)
+        private void ImgCoordToPDFCoord(ref int y, int imgHeight)
         {
             y = imgHeight - y;
         }
