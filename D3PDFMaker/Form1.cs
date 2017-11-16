@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace D3PDFMaker
@@ -18,11 +19,13 @@ namespace D3PDFMaker
         /// <summary>
         /// メインフォームのイベント
         /// </summary>
+
+        // forCustomer -> true のとき、ファイル名をお客様仕様で出力
         static public bool forCustomer = true;
 
         private List<string> errorList = new List<string>();
 
-        private string[] tmpPath;
+        private string tmpPath;
         private string pdfPath;
         private string excelPath;
         private string savePath;
@@ -36,6 +39,13 @@ namespace D3PDFMaker
 
         public Color fontcolor = Color.FromArgb(0, 0, 0);
 
+        List<string> ValidMansionNameList = new List<string>();
+        List<string> ValidPrintCntList = new List<string>();
+        List<string> ValidNoList = new List<string>();
+
+        string font;
+        string subPathName;
+
         // イメージファイル
         Bitmap loadingImg = Properties.Resources.loading;
 
@@ -46,7 +56,7 @@ namespace D3PDFMaker
         }
 
         //PDF選択 ボタンを押したときの処理
-        async private void btn_PDF_Click(object sender, EventArgs e)
+        private void btn_PDF_Click(object sender, EventArgs e)
         {
             var openFile = new OpenFileDialog();
             //openFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -62,14 +72,14 @@ namespace D3PDFMaker
                 thumbBox.Image = loadingImg;
                 btn_PDF.Enabled = false;
 
-                await Task.Run(() =>
+                Task.Factory.StartNew(() =>
                 {
                     var thumb = new ThumbMaker();
-                    tmpPath = thumb.Generate(openFile.FileName, dpi: form1.dpi);
+                    tmpPath = thumb.Generate(openFile.FileName);
 
                     thumbBox.SizeMode = PictureBoxSizeMode.Zoom;
                     thumbBox.BackgroundImageLayout = ImageLayout.Center;
-                    thumbBox.ImageLocation = tmpPath[0];
+                    thumbBox.Image = CreateImage(tmpPath);
                 });
 
                 btn_PDF.Enabled = true;
@@ -147,7 +157,7 @@ namespace D3PDFMaker
         }
 
         // サンプルデータを作成 ボタンを押したときの処理
-        async private void btn_MakeSample_Click(object sender, EventArgs e)
+        private void btn_MakeSample_Click(object sender, EventArgs e)
         {
             if (minX == 0 || maxY == 0 || slctWidth == 0 || slctHeight == 0)
             {
@@ -160,7 +170,7 @@ namespace D3PDFMaker
 
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
-            string font = box_fontlist.SelectedValue.ToString();
+            font = box_fontlist.SelectedValue.ToString();
             string sampleText = txtbx_Sampletext.Text.ToString();
 
             int align = GetRadioBoxValue();
@@ -182,7 +192,7 @@ namespace D3PDFMaker
             btn_MakeAll.Enabled = false;
             btn_reset.Enabled = false;
 
-            await Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 PDFAppend pdf = new PDFAppend(pdfPath);
                 var pdfContentByte = pdf.CopyTemplate();
@@ -198,23 +208,27 @@ namespace D3PDFMaker
                                     MessageBoxIcon.Error);
                     return;
                 }
-                finally
-                {
-                    btn_MakeSample.Enabled = true;
-                    btn_MakeAll.Enabled = true;
-                    btn_reset.Enabled = true;
-                }
-
                 MessageBox.Show(dstPath + "を作成しました。");
                 System.Diagnostics.Process p = System.Diagnostics.Process.Start(dstPath);
-            });
+
+            }).ContinueWith(_ =>
+            {
+                btn_MakeSample.Enabled = true;
+                btn_MakeAll.Enabled = true;
+                btn_reset.Enabled = true;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         // 全データを作成 ボタンを押したときの処理
-        async private void btn_MakeAll_Click(object sender, EventArgs e)
+        private void btn_MakeAll_Click(object sender, EventArgs e)
         {
             // エラーリストを初期化しておく
             errorList.Clear();
+
+            // エクセルリストを初期化する
+            ValidMansionNameList.Clear();
+            ValidPrintCntList.Clear();
+            ValidNoList.Clear();
 
             if (minX == 0 || maxY == 0 || slctWidth == 0 || slctHeight == 0)
             {
@@ -248,6 +262,7 @@ namespace D3PDFMaker
             }
 
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            font = box_fontlist.SelectedValue.ToString();
 
             int sheetNum = Convert.ToInt32(box_excelsheet.SelectedValue.ToString());
             var sheet = excel.GetSheet(sheetNum - 1);
@@ -273,7 +288,7 @@ namespace D3PDFMaker
 
             // D3作成済PDF フォルダに、子フォルダを作る
             string subFolderName = Path.GetFileNameWithoutExtension(pdfPath) + "_" + sheetName;
-            string subPathName = Path.Combine(savePath2, subFolderName);
+            subPathName = Path.Combine(savePath2, subFolderName);
             Directory.CreateDirectory(subPathName);
 
             DialogResult result2 = MessageBox.Show(subPathName + " にPDFデータを作成します。よろしいですか？　同名のファイルは上書きされます。",
@@ -284,9 +299,6 @@ namespace D3PDFMaker
 
             /*    PDF生成の処理はここから    */
 
-            List<string> ValidMansionNameList = new List<string>();
-            List<string> ValidPrintCntList = new List<string>();
-            List<string> ValidNoList = new List<string>();
             GetValidList(ValidNoList, ValidMansionNameList, ValidPrintCntList, NoList, MansionNameList, PrintCntList);
 
             if(ValidMansionNameList.Count < 1)
@@ -298,10 +310,43 @@ namespace D3PDFMaker
                 return;
             }
 
-            ProgressBarForm progressForm = new ProgressBarForm();
-            var progressFormTask = progressForm.ShowDialogAsync();
+            /*    PDF生成の開始    */
+
+            ProgressBarForm progressForm = new ProgressBarForm(new DoWorkEventHandler(ProgressDialog_DoWork), ValidMansionNameList.Count);
+            DialogResult procResult = progressForm.ShowDialog(this);
+
+            if(procResult == DialogResult.OK)
+            {
+                MessageBox.Show("PDFの出力が完了しました。",
+                "メッセージ",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Asterisk);
+
+                if (errorList.Count > 0)
+                {
+                    string[] errorArr = errorList.ToArray();
+                    var errors = String.Join("\r\n", errorArr);
+                    var errorlog = Path.Combine(subPathName, "エラーログ.txt");
+                    StreamWriter sw = File.CreateText(errorlog);
+                    sw.Write(errors);
+                    sw.Close();
+                    MessageBox.Show("エラーが発生しています。エクセルリストをご確認ください。",
+                                    "メッセージ",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Asterisk);
+                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(errorlog);
+                }
+
+                progressForm.Close();
+            }
+        }
+
+        private void ProgressDialog_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bw = (BackgroundWorker)sender;
 
             int cnt = 0;
+            string filename = "";
             for (int i = 0; ValidMansionNameList.Count > i; i++)
             {
                 try
@@ -311,36 +356,18 @@ namespace D3PDFMaker
                     string no = ValidNoList[i];
                     if (mansionName == "" || printCnt == "") continue;
 
-                    var data = await MakeAllPDF(mansionName, printCnt, no, subPathName, cnt);
+                    var data = MakeAllPDF(mansionName, printCnt, no, subPathName, font, cnt);
                     cnt = data.count;
-                    progressForm.updateProgressBar(data, ValidMansionNameList.Count, subPathName);
+                    filename = data.name;
+                    //progressForm.updateProgressBar(data, ValidMansionNameList.Count, subPathName);
                 }
                 catch (Exception error)
                 {
                     Console.WriteLine("{0}\n", error);
                 }
+                var args = new string[] { subPathName, filename, Convert.ToString(i) + "/" + Convert.ToString(ValidMansionNameList.Count) };
+                bw.ReportProgress(i, args);
             }
-
-            MessageBox.Show(cnt + "件のPDFを出力しました。",
-                            "メッセージ",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Asterisk);
-
-            if(errorList.Count > 0) {
-                var errors = String.Join("\n", errorList);
-                var errorlog = Path.Combine(subPathName, "エラーログ.txt");
-                StreamWriter sw = File.CreateText(errorlog);
-                sw.Write(errors);
-                sw.Close();
-                MessageBox.Show("エラーが発生しています。エクセルリストをご確認ください。",
-                                "メッセージ",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Asterisk);
-                System.Diagnostics.Process p = System.Diagnostics.Process.Start(errorlog);
-            }
-
-            progressForm.Close();
-            await progressFormTask;
         }
 
         // サムネイルスペースをクリックしたときの処理
@@ -350,11 +377,10 @@ namespace D3PDFMaker
             {
                 return;
             }
-            else if (thumbBox.ImageLocation != null)
+            else if (thumbBox.Image != null)
             {
-                string imgPath = Convert.ToString(thumbBox.ImageLocation);
                 var f = new Form2(this);
-                f.CurrentImage = Image.FromFile(imgPath);
+                f.CurrentImage = thumbBox.Image;
                 f.ShowDialog();
             }
             else
@@ -366,7 +392,12 @@ namespace D3PDFMaker
         // リセットボタンを押したときの処理
         private void btn_reset_Click(object sender, EventArgs e)
         {
-            thumbBox.ImageLocation = null;
+            thumbBox.Image = null;
+            if (File.Exists(tmpPath))
+            {
+                File.Delete(tmpPath);
+            }
+            tmpPath = "";
             txtbx_PDF.Text = "";
             txtbx_Excel.Text = "";
             txtbx_SaveDir.Text = "";
@@ -375,6 +406,10 @@ namespace D3PDFMaker
             slctWidth = 0;
             slctHeight = 0;
             DisableDropDownList();
+            errorList.Clear();
+            ValidMansionNameList.Clear();
+            ValidPrintCntList.Clear();
+            ValidNoList.Clear();
             fontcolor = Color.FromArgb(0, 0, 0);
             colorBox.BackColor = fontcolor;
         }
@@ -382,7 +417,10 @@ namespace D3PDFMaker
         //フォームを閉じるときの処理
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+            if (File.Exists(tmpPath))
+            {
+                File.Delete(tmpPath);
+            }
         }
 
         // カラーボックスをクリックしたときの処理

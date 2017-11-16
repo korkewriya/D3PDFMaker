@@ -106,5 +106,13 @@ namespace D3PDFMaker
             if (boxWidth > widthPoint) return 100f;
             else return boxWidth / widthPoint * 100;
         }
+
+        public static int GetPageNum(string pdffile)
+        {
+            PdfReader pdfReader = new PdfReader(pdffile);
+            int numberOfPages = pdfReader.NumberOfPages;
+            pdfReader.Close();
+            return numberOfPages;
+        }
     }
 }

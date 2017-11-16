@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Data;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
@@ -106,15 +105,17 @@ namespace D3PDFMaker
             box_excelsheet.Enabled = false;
             box_excelsheet.DataSource = null;
             box_excelsheet.Items.Clear();
+            excelPath = null;
         }
 
         // PDFデータをまとめて作成する
-        async public Task<ProgressValue> MakeAllPDF(string mansionName, string printCnt, string no, string subPathName, int cnt)
+        public ProgressValue MakeAllPDF(string mansionName, string printCnt, string no, string subPathName, string font, int cnt)
         {
             ProgressValue values = new ProgressValue();
 
+            string filename;
             if (forCustomer) {  // お客様向けモード
-                if(Convert.ToDecimal(printCnt) % 2 == 1)    // 奇数の場合
+                if (Convert.ToDecimal(printCnt) % 2 == 1)    // 奇数の場合
                 {
                     printCnt = "Z" + Convert.ToString(Convert.ToDecimal(printCnt) + 1);
                 }
@@ -122,38 +123,33 @@ namespace D3PDFMaker
                 {
                     printCnt = "Z" + printCnt;
                 }
+                filename = mansionName + "_" + printCnt + ".pdf";
             }
             else    // 社内向けモード
             {
+                string _no = no.PadLeft(3, '0');
                 printCnt = "CP" + Convert.ToString(Math.Ceiling(Convert.ToDecimal(printCnt) / 2));
+                filename = _no + "_" + mansionName + "_" + printCnt + ".pdf";
             }
-            // ロッキーさんより指示あり、一時的にIndexをファイル名に含めない（11/11/13）
-            // string filename = no + "_" + mansionName + "_" + printCnt + ".pdf";
-            string filename = mansionName + "_" + printCnt + ".pdf";
-
-            string font = box_fontlist.SelectedValue.ToString();
 
             int align = GetRadioBoxValue();
             float alignedMinX = GetAlignedXcoord(minX, slctWidth, align);
 
-            await Task.Run(() =>
+            PDFAppend pdf = new PDFAppend(pdfPath);
+            var pdfContentByte = pdf.CopyTemplate();
+            pdf.Append(ref pdfContentByte, mansionName, alignedMinX, maxY, slctWidth, slctHeight, font, fontcolor, align);
+            pdf.Close();
+            string dstPath = Path.Combine(subPathName, filename);
+            try
             {
-                PDFAppend pdf = new PDFAppend(pdfPath);
-                var pdfContentByte = pdf.CopyTemplate();
-                pdf.Append(ref pdfContentByte, mansionName, alignedMinX, maxY, slctWidth, slctHeight, font, fontcolor, align);
-                pdf.Close();
-                string dstPath = Path.Combine(subPathName, filename);
-                try
-                {
-                    pdf.Save(dstPath);
-                }
-                catch (IOException)
-                {
-                    string errorMsg = "◆No." + no + " " + mansionName + " : 開いているPDFを閉じてから、作成ボタンを押してください。";
-                    errorList.Add(errorMsg);
-                    cnt--;
-                }
-            });
+                pdf.Save(dstPath);
+            }
+            catch (IOException)
+            {
+                string errorMsg = "◆No." + no + " " + mansionName + " : 開いているPDFを閉じてから、作成ボタンを押してください。";
+                errorList.Add(errorMsg);
+                cnt--;
+            }
 
             values.name = filename;
             values.count = ++cnt;
@@ -164,7 +160,9 @@ namespace D3PDFMaker
         // フォント一覧をコンボボックスに表示する
         private void GetFontList()
         {
-            string fontPath = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
+            DirectoryInfo dirWindowsFolder = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System));
+            string fontPath = Path.Combine(dirWindowsFolder.FullName, "Fonts");
+            //string fontPath = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
             RegistryKey fonts = GetSystemFontFromRegistry();
             Dictionary<string, string> fontDict = MakeFontDict(fonts, fontPath);
 
@@ -191,6 +189,18 @@ namespace D3PDFMaker
             if (rdo_center.Checked) return 1;
             else if (rdo_left.Checked) return 0;
             else return 2;
+        }
+
+        // ファイルをロックせず画像を読み込む
+        private System.Drawing.Image CreateImage(string filename)
+        {
+            System.IO.FileStream fs = new System.IO.FileStream(
+                filename,
+                System.IO.FileMode.Open,
+                System.IO.FileAccess.Read);
+            System.Drawing.Image img = System.Drawing.Image.FromStream(fs);
+            fs.Close();
+            return img;
         }
 
         // Alignを考慮したX座標を取得する
@@ -290,17 +300,6 @@ namespace D3PDFMaker
                 sw.WriteLine(s);
             }
             sw.Close();
-        }
-    }
-
-    internal static class DialogExt
-    {
-        public static async Task<DialogResult> ShowDialogAsync(this Form @this)
-        {
-            await Task.Yield();
-            if (@this.IsDisposed)
-                return DialogResult.OK;
-            return @this.ShowDialog();
         }
     }
 }

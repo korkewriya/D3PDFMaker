@@ -32,6 +32,7 @@
             this.lbl_pdfname = new System.Windows.Forms.Label();
             this.lbl_count = new System.Windows.Forms.Label();
             this.lbl_dir = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // ProgressBarControl
@@ -77,6 +78,10 @@
             this.lbl_dir.TabIndex = 3;
             this.lbl_dir.Text = "ディレクトリ名";
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            // 
             // ProgressBarForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -88,6 +93,8 @@
             this.Controls.Add(this.lbl_pdfname);
             this.Controls.Add(this.ProgressBarControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ProgressBarForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PDFデータを作成中…";
@@ -102,5 +109,6 @@
         private System.Windows.Forms.Label lbl_pdfname;
         private System.Windows.Forms.Label lbl_count;
         private System.Windows.Forms.Label lbl_dir;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
