@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D3PDFMaker", "D3PDFMaker\D3PDFMaker.csproj", "{A6E161D8-D0CE-49EF-9231-3D1B91BF782D}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "D3PDFMaker_Installer", "D3PDFMaker_Installer\D3PDFMaker_Installer.vdproj", "{FED3C4AB-D62D-4AD6-8410-65AF3B21191E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,9 @@ Global
 		{A6E161D8-D0CE-49EF-9231-3D1B91BF782D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6E161D8-D0CE-49EF-9231-3D1B91BF782D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6E161D8-D0CE-49EF-9231-3D1B91BF782D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED3C4AB-D62D-4AD6-8410-65AF3B21191E}.Debug|Any CPU.ActiveCfg = Debug
+		{FED3C4AB-D62D-4AD6-8410-65AF3B21191E}.Debug|Any CPU.Build.0 = Debug
+		{FED3C4AB-D62D-4AD6-8410-65AF3B21191E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
