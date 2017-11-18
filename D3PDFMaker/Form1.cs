@@ -29,6 +29,7 @@ namespace D3PDFMaker
         private string pdfPath;
         private string excelPath;
         private string savePath;
+        public static string binPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
         public float minX = 0;
         public float maxY = 0;
@@ -74,8 +75,24 @@ namespace D3PDFMaker
 
                 Task.Factory.StartNew(() =>
                 {
+                    if (File.Exists(tmpPath))
+                    {
+                        File.Delete(tmpPath);
+                    }
+
                     var thumb = new ThumbMaker();
                     tmpPath = thumb.Generate(openFile.FileName);
+
+                    if (tmpPath == "")
+                    {
+                        MessageBox.Show("PDFファイルの読み込みに失敗しました。",
+                                        "エラー",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                        pdfPath = txtbx_PDF.Text = "";
+                        thumbBox.Image = null;
+                        return;
+                    }
 
                     thumbBox.SizeMode = PictureBoxSizeMode.Zoom;
                     thumbBox.BackgroundImageLayout = ImageLayout.Center;
@@ -318,9 +335,9 @@ namespace D3PDFMaker
             if(procResult == DialogResult.OK)
             {
                 MessageBox.Show("PDFの出力が完了しました。",
-                "メッセージ",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Asterisk);
+                                "メッセージ",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Asterisk);
 
                 if (errorList.Count > 0)
                 {

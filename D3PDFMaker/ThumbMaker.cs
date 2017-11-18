@@ -4,16 +4,15 @@ namespace D3PDFMaker
 {
     public class ThumbMaker
     {
-        string binPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
         public string Generate(string pdfFile)
         {
             string tmpPath = System.IO.Path.GetTempFileName();
             string pngPath = tmpPath + "-000001.png";
             string _tmpPath = '"' + tmpPath + '"';
-            string rcsPath = System.IO.Path.Combine(binPath, "resources");
-            string pdftopng = '"' + System.IO.Path.Combine(rcsPath, "pdftopng.exe") + '"';
-            string _pdfFile = '"' + pdfFile + '"';
+            string pdftopng = '"' + System.IO.Path.Combine(form1.binPath, "pdftopng.exe") + '"';
+
+            string tmpPdf = convertToTempFile(pdfFile);
+            string _pdfFile = '"' + tmpPdf + '"';
 
             var extProcess = new System.Diagnostics.Process();
             extProcess.StartInfo.FileName = pdftopng;
@@ -32,9 +31,23 @@ namespace D3PDFMaker
             extProcess.WaitForExit();
             extProcess.Dispose();
 
-            File.Delete(tmpPath);
-            File.Move(pngPath, tmpPath);
+            try { 
+                File.Delete(tmpPath);
+                File.Delete(tmpPdf);
+                File.Move(pngPath, tmpPath);
+            }
+            catch (FileNotFoundException)
+            {
+                return "";
+            }
 
+            return tmpPath;
+        }
+
+        private string convertToTempFile(string file)
+        {
+            string tmpPath = System.IO.Path.GetTempFileName();
+            File.Copy(file, tmpPath, overwrite: true);
             return tmpPath;
         }
     }

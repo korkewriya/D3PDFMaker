@@ -55,14 +55,21 @@
             this.colorBox = new System.Windows.Forms.PictureBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.label7 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.メニューToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.エクセルテンプレートを保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.終了ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.thumbBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBox)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // thumbBox
             // 
             this.thumbBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.thumbBox.Location = new System.Drawing.Point(14, 13);
+            this.thumbBox.Location = new System.Drawing.Point(12, 37);
             this.thumbBox.Name = "thumbBox";
             this.thumbBox.Size = new System.Drawing.Size(236, 334);
             this.thumbBox.TabIndex = 0;
@@ -72,7 +79,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(270, 13);
+            this.label1.Location = new System.Drawing.Point(268, 37);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 12);
             this.label1.TabIndex = 1;
@@ -80,7 +87,7 @@
             // 
             // txtbx_PDF
             // 
-            this.txtbx_PDF.Location = new System.Drawing.Point(272, 33);
+            this.txtbx_PDF.Location = new System.Drawing.Point(270, 57);
             this.txtbx_PDF.Name = "txtbx_PDF";
             this.txtbx_PDF.ReadOnly = true;
             this.txtbx_PDF.Size = new System.Drawing.Size(343, 19);
@@ -88,7 +95,7 @@
             // 
             // btn_PDF
             // 
-            this.btn_PDF.Location = new System.Drawing.Point(621, 29);
+            this.btn_PDF.Location = new System.Drawing.Point(619, 53);
             this.btn_PDF.Name = "btn_PDF";
             this.btn_PDF.Size = new System.Drawing.Size(23, 23);
             this.btn_PDF.TabIndex = 3;
@@ -98,7 +105,7 @@
             // 
             // btn_Excel
             // 
-            this.btn_Excel.Location = new System.Drawing.Point(621, 84);
+            this.btn_Excel.Location = new System.Drawing.Point(619, 108);
             this.btn_Excel.Name = "btn_Excel";
             this.btn_Excel.Size = new System.Drawing.Size(23, 23);
             this.btn_Excel.TabIndex = 6;
@@ -108,7 +115,7 @@
             // 
             // txtbx_Excel
             // 
-            this.txtbx_Excel.Location = new System.Drawing.Point(272, 88);
+            this.txtbx_Excel.Location = new System.Drawing.Point(270, 112);
             this.txtbx_Excel.Name = "txtbx_Excel";
             this.txtbx_Excel.ReadOnly = true;
             this.txtbx_Excel.Size = new System.Drawing.Size(343, 19);
@@ -117,7 +124,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(270, 68);
+            this.label2.Location = new System.Drawing.Point(268, 92);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 12);
             this.label2.TabIndex = 4;
@@ -126,7 +133,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(270, 176);
+            this.label3.Location = new System.Drawing.Point(268, 200);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(38, 12);
             this.label3.TabIndex = 7;
@@ -136,7 +143,7 @@
             // 
             this.box_fontlist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.box_fontlist.FormattingEnabled = true;
-            this.box_fontlist.Location = new System.Drawing.Point(272, 196);
+            this.box_fontlist.Location = new System.Drawing.Point(270, 220);
             this.box_fontlist.Name = "box_fontlist";
             this.box_fontlist.Size = new System.Drawing.Size(197, 20);
             this.box_fontlist.TabIndex = 10;
@@ -146,7 +153,7 @@
             // 
             this.rdo_center.AutoSize = true;
             this.rdo_center.Checked = true;
-            this.rdo_center.Location = new System.Drawing.Point(272, 235);
+            this.rdo_center.Location = new System.Drawing.Point(270, 259);
             this.rdo_center.Name = "rdo_center";
             this.rdo_center.Size = new System.Drawing.Size(68, 16);
             this.rdo_center.TabIndex = 11;
@@ -157,7 +164,7 @@
             // rdo_left
             // 
             this.rdo_left.AutoSize = true;
-            this.rdo_left.Location = new System.Drawing.Point(360, 235);
+            this.rdo_left.Location = new System.Drawing.Point(358, 259);
             this.rdo_left.Name = "rdo_left";
             this.rdo_left.Size = new System.Drawing.Size(56, 16);
             this.rdo_left.TabIndex = 12;
@@ -168,7 +175,7 @@
             // rdo_right
             // 
             this.rdo_right.AutoSize = true;
-            this.rdo_right.Location = new System.Drawing.Point(436, 235);
+            this.rdo_right.Location = new System.Drawing.Point(434, 259);
             this.rdo_right.Name = "rdo_right";
             this.rdo_right.Size = new System.Drawing.Size(56, 16);
             this.rdo_right.TabIndex = 13;
@@ -178,7 +185,7 @@
             // 
             // btn_SaveDir
             // 
-            this.btn_SaveDir.Location = new System.Drawing.Point(621, 287);
+            this.btn_SaveDir.Location = new System.Drawing.Point(619, 311);
             this.btn_SaveDir.Name = "btn_SaveDir";
             this.btn_SaveDir.Size = new System.Drawing.Size(23, 23);
             this.btn_SaveDir.TabIndex = 16;
@@ -188,7 +195,7 @@
             // 
             // txtbx_SaveDir
             // 
-            this.txtbx_SaveDir.Location = new System.Drawing.Point(272, 289);
+            this.txtbx_SaveDir.Location = new System.Drawing.Point(270, 313);
             this.txtbx_SaveDir.Name = "txtbx_SaveDir";
             this.txtbx_SaveDir.ReadOnly = true;
             this.txtbx_SaveDir.Size = new System.Drawing.Size(343, 19);
@@ -197,7 +204,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(270, 269);
+            this.label4.Location = new System.Drawing.Point(268, 293);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 14;
@@ -205,7 +212,7 @@
             // 
             // btn_MakeSample
             // 
-            this.btn_MakeSample.Location = new System.Drawing.Point(272, 324);
+            this.btn_MakeSample.Location = new System.Drawing.Point(270, 348);
             this.btn_MakeSample.Name = "btn_MakeSample";
             this.btn_MakeSample.Size = new System.Drawing.Size(115, 23);
             this.btn_MakeSample.TabIndex = 17;
@@ -215,7 +222,7 @@
             // 
             // btn_MakeAll
             // 
-            this.btn_MakeAll.Location = new System.Drawing.Point(397, 324);
+            this.btn_MakeAll.Location = new System.Drawing.Point(395, 348);
             this.btn_MakeAll.Name = "btn_MakeAll";
             this.btn_MakeAll.Size = new System.Drawing.Size(102, 23);
             this.btn_MakeAll.TabIndex = 18;
@@ -225,7 +232,7 @@
             // 
             // btn_reset
             // 
-            this.btn_reset.Location = new System.Drawing.Point(509, 324);
+            this.btn_reset.Location = new System.Drawing.Point(507, 348);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(90, 23);
             this.btn_reset.TabIndex = 19;
@@ -237,7 +244,7 @@
             // 
             this.lbl_fontSample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbl_fontSample.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lbl_fontSample.Location = new System.Drawing.Point(485, 184);
+            this.lbl_fontSample.Location = new System.Drawing.Point(483, 208);
             this.lbl_fontSample.Name = "lbl_fontSample";
             this.lbl_fontSample.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.lbl_fontSample.Size = new System.Drawing.Size(159, 32);
@@ -248,7 +255,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(272, 123);
+            this.label5.Location = new System.Drawing.Point(270, 147);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(134, 12);
             this.label5.TabIndex = 21;
@@ -256,7 +263,7 @@
             // 
             // txtbx_Sampletext
             // 
-            this.txtbx_Sampletext.Location = new System.Drawing.Point(274, 142);
+            this.txtbx_Sampletext.Location = new System.Drawing.Point(272, 166);
             this.txtbx_Sampletext.Name = "txtbx_Sampletext";
             this.txtbx_Sampletext.Size = new System.Drawing.Size(239, 19);
             this.txtbx_Sampletext.TabIndex = 22;
@@ -267,7 +274,7 @@
             this.box_excelsheet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.box_excelsheet.Enabled = false;
             this.box_excelsheet.FormattingEnabled = true;
-            this.box_excelsheet.Location = new System.Drawing.Point(528, 142);
+            this.box_excelsheet.Location = new System.Drawing.Point(526, 166);
             this.box_excelsheet.Name = "box_excelsheet";
             this.box_excelsheet.Size = new System.Drawing.Size(116, 20);
             this.box_excelsheet.TabIndex = 23;
@@ -275,7 +282,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(526, 123);
+            this.label6.Location = new System.Drawing.Point(524, 147);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(78, 12);
             this.label6.TabIndex = 25;
@@ -284,7 +291,7 @@
             // colorBox
             // 
             this.colorBox.BackColor = System.Drawing.SystemColors.Desktop;
-            this.colorBox.Location = new System.Drawing.Point(562, 234);
+            this.colorBox.Location = new System.Drawing.Point(560, 258);
             this.colorBox.Name = "colorBox";
             this.colorBox.Size = new System.Drawing.Size(82, 16);
             this.colorBox.TabIndex = 26;
@@ -294,17 +301,65 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(524, 237);
+            this.label7.Location = new System.Drawing.Point(522, 261);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(32, 12);
             this.label7.TabIndex = 27;
             this.label7.Text = "カラー";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.メニューToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(656, 26);
+            this.menuStrip1.TabIndex = 28;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // メニューToolStripMenuItem
+            // 
+            this.メニューToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.エクセルテンプレートを保存ToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem1,
+            this.終了ToolStripMenuItem});
+            this.メニューToolStripMenuItem.Name = "メニューToolStripMenuItem";
+            this.メニューToolStripMenuItem.Size = new System.Drawing.Size(68, 22);
+            this.メニューToolStripMenuItem.Text = "メニュー";
+            // 
+            // エクセルテンプレートを保存ToolStripMenuItem
+            // 
+            this.エクセルテンプレートを保存ToolStripMenuItem.Name = "エクセルテンプレートを保存ToolStripMenuItem";
+            this.エクセルテンプレートを保存ToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.エクセルテンプレートを保存ToolStripMenuItem.Text = "エクセルテンプレートを出力";
+            this.エクセルテンプレートを保存ToolStripMenuItem.Click += new System.EventHandler(this.SaveExcelTemplToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(232, 22);
+            this.toolStripMenuItem2.Text = "マニュアルを表示";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.ShowManualtoolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(229, 6);
+            // 
+            // 終了ToolStripMenuItem
+            // 
+            this.終了ToolStripMenuItem.Name = "終了ToolStripMenuItem";
+            this.終了ToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.終了ToolStripMenuItem.Text = "終了";
+            this.終了ToolStripMenuItem.Click += new System.EventHandler(this.QuitToolStripMenuItem_Click);
+            // 
             // form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(656, 359);
+            this.ClientSize = new System.Drawing.Size(656, 382);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.colorBox);
             this.Controls.Add(this.label6);
@@ -330,8 +385,10 @@
             this.Controls.Add(this.txtbx_PDF);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.thumbBox);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -339,6 +396,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.thumbBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.colorBox)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -372,6 +431,12 @@
         private System.Windows.Forms.PictureBox colorBox;
         private System.Windows.Forms.ColorDialog colorDialog;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem メニューToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem エクセルテンプレートを保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 終了ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 
