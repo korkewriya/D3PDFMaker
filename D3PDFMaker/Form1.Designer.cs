@@ -133,7 +133,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(268, 200);
+            this.label3.Location = new System.Drawing.Point(268, 203);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(38, 12);
             this.label3.TabIndex = 7;
@@ -143,7 +143,7 @@
             // 
             this.box_fontlist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.box_fontlist.FormattingEnabled = true;
-            this.box_fontlist.Location = new System.Drawing.Point(270, 220);
+            this.box_fontlist.Location = new System.Drawing.Point(270, 223);
             this.box_fontlist.Name = "box_fontlist";
             this.box_fontlist.Size = new System.Drawing.Size(197, 20);
             this.box_fontlist.TabIndex = 10;
@@ -153,7 +153,7 @@
             // 
             this.rdo_center.AutoSize = true;
             this.rdo_center.Checked = true;
-            this.rdo_center.Location = new System.Drawing.Point(270, 259);
+            this.rdo_center.Location = new System.Drawing.Point(270, 262);
             this.rdo_center.Name = "rdo_center";
             this.rdo_center.Size = new System.Drawing.Size(68, 16);
             this.rdo_center.TabIndex = 11;
@@ -164,7 +164,7 @@
             // rdo_left
             // 
             this.rdo_left.AutoSize = true;
-            this.rdo_left.Location = new System.Drawing.Point(358, 259);
+            this.rdo_left.Location = new System.Drawing.Point(346, 262);
             this.rdo_left.Name = "rdo_left";
             this.rdo_left.Size = new System.Drawing.Size(56, 16);
             this.rdo_left.TabIndex = 12;
@@ -175,7 +175,7 @@
             // rdo_right
             // 
             this.rdo_right.AutoSize = true;
-            this.rdo_right.Location = new System.Drawing.Point(434, 259);
+            this.rdo_right.Location = new System.Drawing.Point(414, 262);
             this.rdo_right.Name = "rdo_right";
             this.rdo_right.Size = new System.Drawing.Size(56, 16);
             this.rdo_right.TabIndex = 13;
@@ -185,7 +185,7 @@
             // 
             // btn_SaveDir
             // 
-            this.btn_SaveDir.Location = new System.Drawing.Point(619, 311);
+            this.btn_SaveDir.Location = new System.Drawing.Point(618, 314);
             this.btn_SaveDir.Name = "btn_SaveDir";
             this.btn_SaveDir.Size = new System.Drawing.Size(23, 23);
             this.btn_SaveDir.TabIndex = 16;
@@ -195,7 +195,7 @@
             // 
             // txtbx_SaveDir
             // 
-            this.txtbx_SaveDir.Location = new System.Drawing.Point(270, 313);
+            this.txtbx_SaveDir.Location = new System.Drawing.Point(269, 316);
             this.txtbx_SaveDir.Name = "txtbx_SaveDir";
             this.txtbx_SaveDir.ReadOnly = true;
             this.txtbx_SaveDir.Size = new System.Drawing.Size(343, 19);
@@ -204,7 +204,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(268, 293);
+            this.label4.Location = new System.Drawing.Point(267, 296);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 14;
@@ -212,7 +212,7 @@
             // 
             // btn_MakeSample
             // 
-            this.btn_MakeSample.Location = new System.Drawing.Point(270, 348);
+            this.btn_MakeSample.Location = new System.Drawing.Point(269, 348);
             this.btn_MakeSample.Name = "btn_MakeSample";
             this.btn_MakeSample.Size = new System.Drawing.Size(115, 23);
             this.btn_MakeSample.TabIndex = 17;
@@ -222,7 +222,7 @@
             // 
             // btn_MakeAll
             // 
-            this.btn_MakeAll.Location = new System.Drawing.Point(395, 348);
+            this.btn_MakeAll.Location = new System.Drawing.Point(394, 348);
             this.btn_MakeAll.Name = "btn_MakeAll";
             this.btn_MakeAll.Size = new System.Drawing.Size(102, 23);
             this.btn_MakeAll.TabIndex = 18;
@@ -232,7 +232,7 @@
             // 
             // btn_reset
             // 
-            this.btn_reset.Location = new System.Drawing.Point(507, 348);
+            this.btn_reset.Location = new System.Drawing.Point(506, 348);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(90, 23);
             this.btn_reset.TabIndex = 19;
@@ -244,7 +244,7 @@
             // 
             this.lbl_fontSample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbl_fontSample.Font = new System.Drawing.Font("MS UI Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lbl_fontSample.Location = new System.Drawing.Point(483, 208);
+            this.lbl_fontSample.Location = new System.Drawing.Point(483, 211);
             this.lbl_fontSample.Name = "lbl_fontSample";
             this.lbl_fontSample.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.lbl_fontSample.Size = new System.Drawing.Size(159, 32);
@@ -291,9 +291,9 @@
             // colorBox
             // 
             this.colorBox.BackColor = System.Drawing.SystemColors.Desktop;
-            this.colorBox.Location = new System.Drawing.Point(560, 258);
+            this.colorBox.Location = new System.Drawing.Point(520, 262);
             this.colorBox.Name = "colorBox";
-            this.colorBox.Size = new System.Drawing.Size(82, 16);
+            this.colorBox.Size = new System.Drawing.Size(121, 16);
             this.colorBox.TabIndex = 26;
             this.colorBox.TabStop = false;
             this.colorBox.Click += new System.EventHandler(this.colorBox_Click);
@@ -301,7 +301,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(522, 261);
+            this.label7.Location = new System.Drawing.Point(481, 264);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(32, 12);
             this.label7.TabIndex = 27;
@@ -359,7 +359,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(656, 382);
+            this.ClientSize = new System.Drawing.Size(656, 383);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.colorBox);
             this.Controls.Add(this.label6);

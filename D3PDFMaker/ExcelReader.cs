@@ -77,9 +77,8 @@ namespace D3PDFMaker
                 return false;
             }
 
-            int[,] coordArr = new int[4, 2] { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 1, 2 } };
-            string[] valueArr = new string[] { "第三企画 マンション名・地名リスト",
-                                               "No.",
+            int[,] coordArr = new int[3, 2] { { 1, 0 }, { 1, 1 }, { 1, 2 } };
+            string[] valueArr = new string[] { "No.",
                                                "印刷 マンション名・地名",
                                                "部数" };
             for (int i = 0; valueArr.Length > i; i++)

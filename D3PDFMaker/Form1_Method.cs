@@ -115,6 +115,7 @@ namespace D3PDFMaker
 
             string filename;
             if (forCustomer) {  // お客様向けモード
+                string _no = no.PadLeft(4, '0');
                 if (Convert.ToDecimal(printCnt) % 2 == 1)    // 奇数の場合
                 {
                     printCnt = "Z" + Convert.ToString(Convert.ToDecimal(printCnt) + 1);
@@ -123,7 +124,7 @@ namespace D3PDFMaker
                 {
                     printCnt = "Z" + printCnt;
                 }
-                filename = mansionName + "_" + printCnt + ".pdf";
+                filename = _no + "_" + mansionName + "_" + printCnt + ".pdf";
             }
             else    // 社内向けモード
             {
@@ -300,6 +301,59 @@ namespace D3PDFMaker
                 sw.WriteLine(s);
             }
             sw.Close();
+        }
+
+        // 文字が縦書きかどうか判定する
+        public string IsVertical(bool checkbox)
+        {
+            if (checkbox)
+            {
+                return iTextSharp.text.pdf.BaseFont.IDENTITY_V;
+            }
+            else
+            {
+                return iTextSharp.text.pdf.BaseFont.IDENTITY_H;
+            }
+        }
+
+
+        // 縦書き・横書き別フォントサイズを取得
+        public float GetFontSize(bool isVertical, float slctWidth, float slctHeight)
+        {
+            if (isVertical)
+            {
+                return slctWidth;
+            }
+            else
+            {
+                return slctHeight;
+            }
+        }
+
+        // 縦書き・横書き別Y座標を取得
+        public float GetYCoord(bool IsVertical, float maxY, float slctHeight)
+        {
+            if (IsVertical)
+            {
+                return maxY + slctHeight;
+            }
+            else
+            {
+                return maxY;
+            }
+        }
+
+        // 縦書き・横書き別X座標を取得
+        public float GetXCoord(bool IsVertical, float maxY, float slctHeight)
+        {
+            if (IsVertical)
+            {
+                return maxY + slctHeight;
+            }
+            else
+            {
+                return maxY;
+            }
         }
     }
 }

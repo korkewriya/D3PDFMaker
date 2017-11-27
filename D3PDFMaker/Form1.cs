@@ -188,6 +188,7 @@ namespace D3PDFMaker
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
             font = box_fontlist.SelectedValue.ToString();
+            //string isVertical = IsVertical(box_isVertical.Checked);
             string sampleText = txtbx_Sampletext.Text.ToString();
 
             int align = GetRadioBoxValue();
