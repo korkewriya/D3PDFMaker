@@ -44,8 +44,13 @@ namespace D3PDFMaker
         List<string> ValidPrintCntList = new List<string>();
         List<string> ValidNoList = new List<string>();
 
+        bool isVertical;
+        string isIdentityVertical;
         string font;
         string subPathName;
+        float fontSize;
+        float wideBox;
+        float YCoord;
 
         // イメージファイル
         Bitmap loadingImg = Properties.Resources.loading;
@@ -188,8 +193,13 @@ namespace D3PDFMaker
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
             font = box_fontlist.SelectedValue.ToString();
-            //string isVertical = IsVertical(box_isVertical.Checked);
+            isVertical = IsVertical(slctWidth, slctHeight);
+            isIdentityVertical = IsIdentityVertical(isVertical);
             string sampleText = txtbx_Sampletext.Text.ToString();
+
+            fontSize = GetFontSize(isVertical, slctWidth, slctHeight);
+            wideBox = GetBoxLongSide(isVertical, slctWidth, slctHeight);
+            YCoord = GetYCoord(isVertical, maxY, slctHeight);
 
             int align = GetRadioBoxValue();
             float alignedMinX = GetAlignedXcoord(minX, slctWidth, align);
@@ -214,7 +224,7 @@ namespace D3PDFMaker
             {
                 PDFAppend pdf = new PDFAppend(pdfPath);
                 var pdfContentByte = pdf.CopyTemplate();
-                pdf.Append(ref pdfContentByte, sampleText, alignedMinX, maxY, slctWidth, slctHeight, font, fontcolor, align);
+                pdf.Append(ref pdfContentByte, sampleText, alignedMinX, YCoord, wideBox, fontSize, font, fontcolor, isIdentityVertical, align);
                 pdf.Close();
                 try {
                     pdf.Save(dstPath);
@@ -281,6 +291,15 @@ namespace D3PDFMaker
 
             if (savePath == null) savePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             font = box_fontlist.SelectedValue.ToString();
+            isVertical = IsVertical(slctWidth, slctHeight);
+            isIdentityVertical = IsIdentityVertical(isVertical);
+
+            fontSize = GetFontSize(isVertical, slctWidth, slctHeight);
+            wideBox = GetBoxLongSide(isVertical, slctWidth, slctHeight);
+            YCoord = GetYCoord(isVertical, maxY, slctHeight);
+
+            int align = GetRadioBoxValue();
+            float alignedMinX = GetAlignedXcoord(minX, slctWidth, align);
 
             int sheetNum = Convert.ToInt32(box_excelsheet.SelectedValue.ToString());
             var sheet = excel.GetSheet(sheetNum - 1);

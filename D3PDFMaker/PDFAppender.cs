@@ -61,11 +61,18 @@ namespace D3PDFMaker
         }
 
         // 指定座標・フォントでテキストを追記する
-        public void Append(ref PdfContentByte pdfContentByte, string str,
-                          float x, float y, float boxWidth, float fontSize, string FONT, Color fontcolor, int alignment = 0)
+        public void Append(ref PdfContentByte pdfContentByte, string text,
+                          float x, float y, float wideBox, float fontSize, string FONT, Color fontcolor, string isVertical, int alignment = 0)
         {
-            SetFont(ref pdfContentByte, FONT, fontSize, str, boxWidth, fontcolor);
-            ShowTextAligned(pdfContentByte, x, y + 1, str, alignment);
+            if(isVertical == "Identity-H") {
+                SetFontH(ref pdfContentByte, FONT, fontSize, text, wideBox, fontcolor);
+                ShowTextH(pdfContentByte, x, y + 1, text, alignment);
+            }
+            else
+            {
+                SetFontV(ref pdfContentByte, FONT, fontSize, text, wideBox, fontcolor, x, y);
+                ShowTextV(pdfContentByte, text.HanToZen(), x, y, fontSize, wideBox);
+            }
         }
 
         // クラスを閉じる
@@ -92,16 +99,16 @@ namespace D3PDFMaker
             return this.tmppath;
         }
 
-        // PDFに文字情報を書き込む
-        public void ShowTextAligned(PdfContentByte pdfContentByte, float x, float y, string text, int alignment = Element.ALIGN_LEFT, float rotation = 0)
+        // PDFに文字情報を書き込む（横）
+        public void ShowTextH(PdfContentByte pdfContentByte, float x, float y, string text, int alignment = Element.ALIGN_LEFT, float rotation = 0)
         {
             pdfContentByte.BeginText();
             pdfContentByte.ShowTextAligned(alignment, text, x, y, rotation);
             pdfContentByte.EndText();
         }
 
-        // フォント・スケールを設定する
-        public void SetFont(ref PdfContentByte pdfContentByte, string fontname, float fontsize, string text, float boxWidth, Color fontcolor)
+        // フォント・スケールを設定する（横）
+        public void SetFontH(ref PdfContentByte pdfContentByte, string fontname, float fontsize, string text, float boxWidth, Color fontcolor)
         {
             var bf = BaseFont.CreateFont(fontname, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             pdfContentByte.SetFontAndSize(bf, fontsize);
@@ -111,12 +118,40 @@ namespace D3PDFMaker
             pdfContentByte.SetColorFill(newcolor);
         }
 
-        // 指定幅に収まるよう長体をかけて調整する用の値を取得する
+        // 指定幅に収まるよう長体をかけて調整する用の値を取得する（横）
         public float GetHorizontalScaling(BaseFont bf, string text, float fontsize, float boxWidth)
         {
             var widthPoint = bf.GetWidthPoint(text, fontsize);
             if (boxWidth > widthPoint) return 100f;
             else return boxWidth / widthPoint * 100;
+        }
+
+        // PDFに文字情報を書き込む（縦）
+        public void ShowTextV(PdfContentByte pdfContentByte, string text, float x, float y, float fontSize, float boxHeight)
+        {
+            pdfContentByte.BeginText();
+            float vScale = GetVerticalScaling(text, fontSize, boxHeight);
+            pdfContentByte.SetTextMatrix(1, 0, 0, vScale, x, y);
+            pdfContentByte.ShowText(text);
+            pdfContentByte.EndText();
+        }
+
+        //　フォント・スケールを設定する（縦）
+        public void SetFontV(ref PdfContentByte pdfContentByte, string fontname, float fontsize, string text, float boxHeight, Color fontcolor,
+                             float x, float y, int alignment = Element.ALIGN_LEFT, float rotation = 0)
+        {
+            var bf = BaseFont.CreateFont(fontname, BaseFont.IDENTITY_V, BaseFont.EMBEDDED);
+            pdfContentByte.SetFontAndSize(bf, fontsize);            
+            BaseColor newcolor = new BaseColor(fontcolor.R, fontcolor.G, fontcolor.B);
+            pdfContentByte.SetColorFill(newcolor);
+        }
+
+        // 指定幅に収まるよう長体をかけて調整する用の値を取得する（縦）
+        public float GetVerticalScaling(string text, float fontSize, float boxHeight)
+        {
+            float heightPoint = text.Length * fontSize;
+            if (boxHeight > heightPoint) return 1f;
+            else return boxHeight / heightPoint;
         }
 
         public static int GetPageNum(string pdffile)

@@ -138,7 +138,7 @@ namespace D3PDFMaker
 
             PDFAppend pdf = new PDFAppend(pdfPath);
             var pdfContentByte = pdf.CopyTemplate();
-            pdf.Append(ref pdfContentByte, mansionName, alignedMinX, maxY, slctWidth, slctHeight, font, fontcolor, align);
+            pdf.Append(ref pdfContentByte, mansionName, alignedMinX, YCoord, wideBox, fontSize, font, fontcolor, isIdentityVertical, align);
             pdf.Close();
             string dstPath = Path.Combine(subPathName, filename);
             try
@@ -304,9 +304,22 @@ namespace D3PDFMaker
         }
 
         // 文字が縦書きかどうか判定する
-        public string IsVertical(bool checkbox)
+        public bool IsVertical(float slctWidth, float slctHeight)
         {
-            if (checkbox)
+            if (slctHeight > slctWidth)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // 文字が縦書きかどうか判定する
+        public string IsIdentityVertical(bool isVertical)
+        {
+            if (isVertical)
             {
                 return iTextSharp.text.pdf.BaseFont.IDENTITY_V;
             }
@@ -331,9 +344,9 @@ namespace D3PDFMaker
         }
 
         // 縦書き・横書き別Y座標を取得
-        public float GetYCoord(bool IsVertical, float maxY, float slctHeight)
+        public float GetYCoord(bool isVertical, float maxY, float slctHeight)
         {
-            if (IsVertical)
+            if (isVertical)
             {
                 return maxY + slctHeight;
             }
@@ -344,15 +357,28 @@ namespace D3PDFMaker
         }
 
         // 縦書き・横書き別X座標を取得
-        public float GetXCoord(bool IsVertical, float maxY, float slctHeight)
+        public float GetXCoord(bool isVertical, float maxY, float slctHeight)
         {
-            if (IsVertical)
+            if (isVertical)
             {
                 return maxY + slctHeight;
             }
             else
             {
                 return maxY;
+            }
+        }
+
+        // 選択範囲の長辺を取得する
+        public float GetBoxLongSide(bool isVertical, float slctWidth, float slctHeight)
+        {
+            if (isVertical)
+            {
+                return slctHeight;
+            }
+            else
+            {
+                return slctWidth;
             }
         }
     }
