@@ -119,7 +119,7 @@ namespace D3PDFMaker
             OKButton.FlatStyle = FlatStyle.Flat;
             OKButton.FlatAppearance.BorderSize = 2;
 
-            OKButton.Location = new Point(x - box_Width, y + 5);
+            OKButton.Location = new Point(x - box_Width, y + 5 + this.AutoScrollPosition.Y);
             OKButton.Size = new System.Drawing.Size(box_Width, box_Height);
 
             OKButton.Click += new EventHandler(button1_Click);

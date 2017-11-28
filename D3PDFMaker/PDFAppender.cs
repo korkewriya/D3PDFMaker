@@ -16,6 +16,8 @@ namespace D3PDFMaker
         private FileStream fs;
         private PdfWriter writer;
 
+        private int pageRotation;
+
         // コンストラクタ::必要なファイルを開く
         public PDFAppend(string srcPDF)
         {
@@ -23,7 +25,8 @@ namespace D3PDFMaker
             this.tmppath = Path.GetTempFileName();
 
             pdfReader = new PdfReader(this.srcpath);
-            var size = pdfReader.GetPageSize(1);
+            var size = pdfReader.GetPageSizeWithRotation(1);
+            pageRotation = pdfReader.GetPageRotation(1);
             document = new Document(size);
             fs = new FileStream(this.tmppath, FileMode.Create, FileAccess.Write);
             writer = PdfWriter.GetInstance(document, fs);
@@ -35,7 +38,16 @@ namespace D3PDFMaker
         {
             var pdfContentByte = writer.DirectContent;
             var page = writer.GetImportedPage(pdfReader, 1);
-            pdfContentByte.AddTemplate(page, 0, 0);
+
+            if (pageRotation == 90)
+                pdfContentByte.AddTemplate(page, 0, -1, 1, 0, 0, pdfReader.GetPageSizeWithRotation(1).Height);
+            else if (pageRotation == 180)
+                pdfContentByte.AddTemplate(page, -1, 0, 0, -1, pdfReader.GetPageSizeWithRotation(1).Width, pdfReader.GetPageSizeWithRotation(1).Height);
+            else if (pageRotation == 270)
+                pdfContentByte.AddTemplate(page, 0, 1, -1, 0, pdfReader.GetPageSizeWithRotation(1).Width, 0);
+            else
+                pdfContentByte.AddTemplate(page, 1, 0, 0, 1, 0, 0);
+
             return pdfContentByte;
         }
 
